@@ -1,100 +1,353 @@
+"use client";
+
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { AvatarImage } from "@radix-ui/react-avatar";
+import { Building, CheckCircle, Home, Search } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="flex flex-col min-h-screen">
+      <header className="px-4 lg:px-6 h-16 flex items-center border-b">
+        <div className="flex items-center gap-2 font-bold text-xl">
+          <Building className="h-6 w-6 text-primary" />
+          <span>Realytics</span>
         </div>
+        <nav className="ml-auto flex gap-4 sm:gap-6">
+          <Link
+            href="#features"
+            className="text-sm font-medium hover:underline underline-offset-4"
+          >
+            Características
+          </Link>
+          <Link
+            href="#how-it-works"
+            className="text-sm font-medium hover:underline underline-offset-4"
+          >
+            Cómo Funciona
+          </Link>
+          <Link
+            href="#contact"
+            className="text-sm font-medium hover:underline underline-offset-4"
+          >
+            Contacto
+          </Link>
+        </nav>
+      </header>
+      <main className="flex-1">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-white to-gray-50">
+          <div className="container px-4 md:px-6">
+            <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px]">
+              <div className="flex flex-col justify-center space-y-4">
+                <div className="space-y-2">
+                  <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
+                    Simplifica tu Búsqueda de Inmuebles y Encuentra las Mejores
+                    Oportunidades de Inversión
+                  </h1>
+                  <p className="max-w-[600px] text-gray-500 md:text-xl">
+                    Obtén acceso exclusivo a nuestro potente buscador
+                    inmobiliario. Encuentra propiedades que coincidan
+                    exactamente con tus criterios antes que nadie.
+                  </p>
+                </div>
+                <div className="w-full max-w-sm space-y-2">
+                  <form
+                    className="flex flex-col gap-2 sm:flex-row"
+                    onSubmit={(e) => e.preventDefault()}
+                  >
+                    <Input
+                      type="email"
+                      placeholder="Introduce tu email"
+                      className="max-w-lg flex-1"
+                      required
+                    />
+                    <Button type="submit" className="shrink-0">
+                      Obtener Acceso
+                    </Button>
+                  </form>
+                  <p className="text-xs text-gray-500">
+                    Únete y descubre las mejores oportunidades inmobiliarias
+                    cerca de ti. Sin spam, nunca.
+                  </p>
+                </div>
+              </div>
+              <Image
+                src="https://fqxttxwgklighunmhwgq.supabase.co/storage/v1/object/public/images/realytics/assets/header.jpg"
+                width={550}
+                height={550}
+                alt="Modern home interior"
+                className="mx-auto aspect-video overflow-hidden rounded-xl object-cover sm:w-full lg:aspect-square"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="features"
+          className="w-full py-12 md:py-24 lg:py-32 bg-white"
+        >
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <div className="inline-block rounded-lg bg-primary/10 px-3 py-1 text-sm text-primary">
+                  Características Exclusivas
+                </div>
+                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
+                  Por Qué Elegir Nuestro Buscador Inmobiliario
+                </h2>
+                <p className="max-w-[900px] text-gray-500 md:text-xl">
+                  Nuestras herramientas de búsqueda avanzadas te ayudan a
+                  encontrar exactamente lo que buscas en el mercado
+                  inmobiliario.
+                </p>
+              </div>
+            </div>
+            <div className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-3">
+              <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm">
+                <Search className="h-12 w-12 text-primary" />
+                <h3 className="text-xl font-bold">Filtros Avanzados</h3>
+                <p className="text-center text-gray-500">
+                  Filtra por precio, ubicación, comodidades y docenas de otros
+                  criterios para encontrar tu coincidencia perfecta.
+                </p>
+              </div>
+              <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm">
+                <Home className="h-12 w-12 text-primary" />
+                <h3 className="text-xl font-bold">Listados Exclusivos</h3>
+                <p className="text-center text-gray-500">
+                  Accede a propiedades no disponibles en otras plataformas,
+                  dándote ventaja en tu búsqueda.
+                </p>
+              </div>
+              <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm">
+                <CheckCircle className="h-12 w-12 text-primary" />
+                <h3 className="text-xl font-bold">
+                  Actualizaciones en Tiempo Real
+                </h3>
+                <p className="text-center text-gray-500">
+                  Recibe notificaciones instantáneas cuando nuevas propiedades
+                  que coincidan con tus criterios estén disponibles.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="how-it-works"
+          className="w-full py-12 md:py-24 lg:py-32 bg-gray-50"
+        >
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
+                  Cómo Funciona
+                </h2>
+                <p className="max-w-[900px] text-gray-500 md:text-xl">
+                  Comenzar con nuestro buscador inmobiliario es simple y
+                  directo.
+                </p>
+              </div>
+            </div>
+            <div className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-3">
+              <div className="flex flex-col items-center space-y-2">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white">
+                  1
+                </div>
+                <h3 className="text-xl font-bold">Regístrate</h3>
+                <p className="text-center text-gray-500">
+                  Introduce tu email para crear una cuenta y obtener acceso
+                  inmediato.
+                </p>
+              </div>
+              <div className="flex flex-col items-center space-y-2">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white">
+                  2
+                </div>
+                <h3 className="text-xl font-bold">
+                  Establece tus Preferencias
+                </h3>
+                <p className="text-center text-gray-500">
+                  Cuéntanos el tipo de inmueble e inversión que estás buscando.
+                </p>
+              </div>
+              <div className="flex flex-col items-center space-y-2">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white">
+                  3
+                </div>
+                <h3 className="text-xl font-bold">Comienza a Buscar</h3>
+                <p className="text-center text-gray-500">
+                  Navega por los listados que coinciden con tus criterios y
+                  encuentra tu próxima inversión.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="cta"
+          className="w-full py-12 md:py-24 lg:py-32 bg-primary text-primary-foreground"
+        >
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2 flex flex-col items-center">
+                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
+                  ¿Te gustaría descubrir propiedades alineadas con tu estrategia
+                  financiera?
+                </h2>
+                <p className="max-w-[600px] text-primary-foreground/80 md:text-xl">
+                  Únete a miles de usuarios que han encontrado las propiedades
+                  que mejor se ajustan a sus necesidades financieras y objetivos
+                  de inversión.
+                </p>
+              </div>
+              <div className="w-full max-w-sm space-y-2">
+                <form
+                  className="flex flex-col gap-2 sm:flex-row"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <Input
+                    type="email"
+                    placeholder="Introduce tu email"
+                    className="max-w-lg flex-1 bg-primary-foreground text-primary"
+                    required
+                  />
+                  <Button
+                    type="submit"
+                    variant="secondary"
+                    className="shrink-0"
+                  >
+                    Obtener Acceso
+                  </Button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="testimonials"
+          className="w-full py-12 md:py-24 lg:py-32 bg-white"
+        >
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
+                  Lo que dicen nuestros usuarios
+                </h2>
+                <p className="max-w-[900px] text-gray-500 md:text-xl">
+                  "Gracias a este buscador, encontré la inversión inmobiliaria
+                  perfecta para mis objetivos financieros. El proceso fue rápido
+                  y sencillo, y ahora tengo una propiedad que se adapta
+                  completamente a mi estrategia de crecimiento. ¡Muy
+                  recomendable para cualquier inversor!"
+                </p>
+              </div>
+            </div>
+            <div className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-2 lg:grid-cols-3">
+              <div className="flex flex-col justify-between space-y-4 rounded-lg border p-6 shadow-sm">
+                <div className="space-y-2">
+                  <p className="text-gray-500">
+                    "Estaba buscando una oportunidad inmobiliaria que se
+                    ajustara a mi presupuesto y objetivos a largo plazo, y este
+                    sitio me facilitó todo. Encontré varias opciones rentables
+                    que encajaban perfectamente con mi plan financiero. ¡Una
+                    herramienta imprescindible para invertir de manera
+                    inteligente!"
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Avatar>
+                    <AvatarImage
+                      className="object-cover"
+                      src="https://fqxttxwgklighunmhwgq.supabase.co/storage/v1/object/public/images/realytics/avatar/woman-1.jpg"
+                    />
+                    <AvatarFallback>LM</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="text-sm font-medium">Laura Martínez</p>
+                    <p className="text-xs text-gray-500">Nueva Propietaria</p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col justify-between space-y-4 rounded-lg border p-6 shadow-sm">
+                <div className="space-y-2">
+                  <p className="text-gray-500">
+                    "Nunca pensé que encontrar una propiedad adecuada a mis
+                    necesidades fuera tan fácil. El buscador me ayudó a
+                    identificar opciones con un alto potencial de rentabilidad y
+                    me ahorró mucho tiempo. Ahora tengo la inversión que siempre
+                    quise, ¡todo gracias a esta plataforma!"
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Avatar>
+                    <AvatarImage
+                      className="object-cover"
+                      src="https://fqxttxwgklighunmhwgq.supabase.co/storage/v1/object/public/images/realytics/avatar/man-1.jpg"
+                    />
+                    <AvatarFallback>CR</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="text-sm font-medium">Carlos Rodríguez</p>
+                    <p className="text-xs text-gray-500">
+                      Inversor Inmobiliario
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col justify-between space-y-4 rounded-lg border p-6 shadow-sm">
+                <div className="space-y-2">
+                  <p className="text-gray-500">
+                    "Como agente inmobiliario, esta herramienta ha revolucionado
+                    cómo ayudo a mis clientes a encontrar oportunidades que
+                    realmente les benefician."
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Avatar>
+                    <AvatarImage
+                      className="object-cover"
+                      src="https://fqxttxwgklighunmhwgq.supabase.co/storage/v1/object/public/images/realytics/avatar/man-2.jpg"
+                    />
+                    <AvatarFallback>VG</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="text-sm font-medium">Víctor García</p>
+                    <p className="text-xs text-gray-500">Agente Inmobiliario</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      <footer id="contact" className="w-full border-t py-6">
+        <div className="container flex flex-col items-center justify-between gap-4 px-4 md:flex-row md:px-6">
+          <div className="flex items-center gap-2 font-semibold">
+            <Building className="h-5 w-5 text-primary" />
+            <span>Realytics</span>
+          </div>
+          <p className="text-center text-sm text-gray-500 md:text-left">
+            &copy; {new Date().getFullYear()} Realytics. Todos los derechos
+            reservados.
+          </p>
+          <div className="flex gap-4">
+            <Link href="#" className="text-sm text-gray-500 hover:underline">
+              Política de Privacidad
+            </Link>
+            <Link href="#" className="text-sm text-gray-500 hover:underline">
+              Términos de Servicio
+            </Link>
+            <Link href="#" className="text-sm text-gray-500 hover:underline">
+              Contáctanos
+            </Link>
+          </div>
+        </div>
       </footer>
     </div>
   );
