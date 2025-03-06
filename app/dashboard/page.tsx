@@ -169,7 +169,7 @@ export default function Dashboard() {
   }, [filtros]);
 
   // Manejar cambios en los filtros
-  const handleFiltroChange = (campo: string, valor: any) => {
+  const handleFiltroChange = (campo: string, valor: number) => {
     setFiltros((prev) => ({
       ...prev,
       [campo]: valor,
@@ -247,7 +247,7 @@ export default function Dashboard() {
                     className="pl-8"
                     value={filtros.ubicacion}
                     onChange={(e) =>
-                      handleFiltroChange("ubicacion", e.target.value)
+                      handleFiltroChange("ubicacion", Number(e.target.value))
                     }
                   />
                 </div>
@@ -276,7 +276,9 @@ export default function Dashboard() {
                 <Label htmlFor="tipo">Tipo de propiedad</Label>
                 <Select
                   value={filtros.tipo}
-                  onValueChange={(value) => handleFiltroChange("tipo", value)}
+                  onValueChange={(value) =>
+                    handleFiltroChange("tipo", Number(value))
+                  }
                 >
                   <SelectTrigger id="tipo">
                     <SelectValue placeholder="Cualquier tipo" />
@@ -298,7 +300,7 @@ export default function Dashboard() {
                 <Select
                   value={filtros.habitaciones}
                   onValueChange={(value) =>
-                    handleFiltroChange("habitaciones", value)
+                    handleFiltroChange("habitaciones", Number(value))
                   }
                 >
                   <SelectTrigger id="habitaciones">
