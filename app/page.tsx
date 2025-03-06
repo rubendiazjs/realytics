@@ -7,8 +7,30 @@ import { AvatarImage } from "@radix-ui/react-avatar";
 import { Building, CheckCircle, Home, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
 
 export default function LandingPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    // Aquí podrías guardar el email en una base de datos
+    // Por ahora, simplemente redirigimos al dashboard
+    try {
+      // Simulamos una pequeña espera para dar feedback al usuario
+      await new Promise((resolve) => setTimeout(resolve, 800));
+
+      // Redirigimos al dashboard con el email como parámetro de consulta
+      router.push(`/dashboard?email=${encodeURIComponent(email)}`);
+    } catch (error) {
+      console.error("Error al procesar el formulario:", error);
+      setIsSubmitting(false);
+    }
+  };
   return (
     <div className="flex flex-col min-h-screen">
       <header className="px-4 lg:px-6 h-16 flex items-center border-b">
@@ -56,16 +78,23 @@ export default function LandingPage() {
                 <div className="w-full max-w-sm space-y-2">
                   <form
                     className="flex flex-col gap-2 sm:flex-row"
-                    onSubmit={(e) => e.preventDefault()}
+                    onSubmit={handleSubmit}
                   >
                     <Input
                       type="email"
                       placeholder="Introduce tu email"
-                      className="max-w-lg flex-1"
+                      className="max-w-lg flex-1 bg-primary-foreground text-primary"
                       required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      disabled={isSubmitting}
                     />
-                    <Button type="submit" className="shrink-0">
-                      Obtener Acceso
+                    <Button
+                      type="submit"
+                      className="shrink-0"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? "Procesando..." : "Obtener Acceso"}
                     </Button>
                   </form>
                   <p className="text-xs text-gray-500">
