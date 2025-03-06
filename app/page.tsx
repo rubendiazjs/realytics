@@ -66,8 +66,8 @@ export default function LandingPage() {
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                    Simplifica tu Búsqueda de Inmuebles y Encuentra las Mejores
-                    Oportunidades de Inversión
+                    Simplifica tu búsqueda de inmuebles y encuentra las mejores
+                    oportunidades de inversión
                   </h1>
                   <p className="max-w-[600px] text-gray-500 md:text-xl">
                     Obtén acceso exclusivo a nuestro potente buscador
@@ -122,10 +122,10 @@ export default function LandingPage() {
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
                 <div className="inline-block rounded-lg bg-primary/10 px-3 py-1 text-sm text-primary">
-                  Características Exclusivas
+                  Características exclusivas
                 </div>
                 <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
-                  Por Qué Elegir Nuestro Buscador Inmobiliario
+                  Por qué elegir nuestro buscador inmobiliario
                 </h2>
                 <p className="max-w-[900px] text-gray-500 md:text-xl">
                   Nuestras herramientas de búsqueda avanzadas te ayudan a
@@ -154,7 +154,7 @@ export default function LandingPage() {
               <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm">
                 <CheckCircle className="h-12 w-12 text-primary" />
                 <h3 className="text-xl font-bold">
-                  Actualizaciones en Tiempo Real
+                  Actualizaciones en tiempo real
                 </h3>
                 <p className="text-center text-gray-500">
                   Recibe notificaciones instantáneas cuando nuevas propiedades
