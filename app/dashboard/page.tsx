@@ -248,7 +248,7 @@ export default function Estadisticas() {
         <div className="mb-6">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <p className="text-gray-500">
-            Resumen de tu actividad y rendimiento en la plataforma
+            Resumen de tu actividad en la plataforma
           </p>
         </div>
 
@@ -370,9 +370,9 @@ export default function Estadisticas() {
         {/* Tabla de propiedades */}
         <Card>
           <CardHeader>
-            <CardTitle>Tus Propiedades</CardTitle>
+            <CardTitle>Tus propiedades en seguimiento</CardTitle>
             <CardDescription>
-              Rendimiento de tus propiedades actuales
+              Rendimiento de tus propiedades en seguimiento actuales
             </CardDescription>
           </CardHeader>
           <CardContent>

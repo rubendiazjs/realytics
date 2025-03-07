@@ -186,8 +186,9 @@ export function ReformCalculatorCard({
                     <div
                       key={opcion.nombre}
                       className={`border rounded-lg p-3 cursor-pointer transition-colors ${
+                        elementosSeleccionados &&
                         elementosSeleccionados[categoria.categoria] ===
-                        opcion.nombre
+                          opcion.nombre
                           ? "border-primary bg-primary/5"
                           : "hover:border-gray-400"
                       }`}

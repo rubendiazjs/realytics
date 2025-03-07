@@ -28,7 +28,7 @@ export default function LandingPage() {
       await new Promise((resolve) => setTimeout(resolve, 800));
 
       // Redirigimos al dashboard con el email como parámetro de consulta
-      router.push(`/dashboard?email=${encodeURIComponent(email)}`);
+      router.push(`/search?email=${encodeURIComponent(email)}`);
     } catch (error) {
       console.error("Error al procesar el formulario:", error);
       setIsSubmitting(false);

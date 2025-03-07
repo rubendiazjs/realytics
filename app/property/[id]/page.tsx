@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronLeft } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AppHeader } from "@/components/realytics/app-header";
 import { PropertyGalleryCarousel } from "@/components/realytics/property-gallery-carousel";
@@ -11,6 +11,7 @@ import { ReformCalculatorCard } from "@/components/realytics/reform-calculator-c
 import { PropertyStatsCard } from "@/components/realytics/property-stats-card";
 import { PriceComparisonCard } from "@/components/realytics/price-comparison-card";
 import { ReformTime } from "@/components/realytics/reform-time-card";
+import Link from "next/link";
 
 // Datos de ejemplo para el inmueble
 const inmueble = {
@@ -193,7 +194,6 @@ const elementosReforma = [
 ];
 
 export default function DetalleInmueble() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
 
@@ -203,17 +203,12 @@ export default function DetalleInmueble() {
 
       <main className="flex-1 p-4 md:p-6 bg-gray-50">
         <div className="mb-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() =>
-              router.push(`/dashboard?email=${encodeURIComponent(email)}`)
-            }
-            className="mb-2"
-          >
-            <ChevronLeft className="h-4 w-4 mr-1" />
-            Volver al dashboard
-          </Button>
+          <Link href={`/search`}>
+            <Button variant="ghost" size="sm" className="mb-2">
+              <ChevronLeft className="h-4 w-4 mr-1" />
+              Volver al buscador
+            </Button>
+          </Link>
           <div className="grid grid-cols-12 gap-4 relative">
             <div className="col-span-8">
               <h1 className="text-2xl font-bold">{inmueble.titulo}</h1>

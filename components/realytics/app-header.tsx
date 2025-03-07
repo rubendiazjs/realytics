@@ -1,19 +1,21 @@
 "use client";
 
-import { Building, Home, LogOut, Search } from "lucide-react";
+import { Building, Calculator, Home, LogOut, Search } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 export interface AppHeaderProps {
   email?: string;
-  showStatsButton?: boolean;
+  showSearchButton?: boolean;
   showDashboardButton?: boolean;
+  showCalculatorButton?: boolean;
 }
 
 export function AppHeader({
   email = "",
-  showStatsButton = true,
+  showSearchButton = true,
   showDashboardButton = true,
+  showCalculatorButton = true,
 }: AppHeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -46,7 +48,7 @@ export function AppHeader({
           </Button>
         )}
 
-        {showStatsButton && (
+        {showSearchButton && (
           <Button
             variant={isActive("/search") ? "active" : "ghost"}
             size="sm"
@@ -56,6 +58,19 @@ export function AppHeader({
           >
             <Search className="h-4 w-4 mr-2" />
             Buscador
+          </Button>
+        )}
+
+        {showCalculatorButton && (
+          <Button
+            variant={isActive("/calculator") ? "active" : "ghost"}
+            size="sm"
+            onClick={() =>
+              router.push(`/calculator?email=${encodeURIComponent(email)}`)
+            }
+          >
+            <Calculator className="h-4 w-4 mr-2" />
+            Calculadora de rentabilidad
           </Button>
         )}
 
