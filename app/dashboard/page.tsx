@@ -1,7 +1,7 @@
 "use client";
 
+import { AppHeader } from "@/components/realytics/app-header";
 import { PropertyCard } from "@/components/realytics/property-card";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -17,72 +17,48 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import {
-  Building,
   BarChartIcon as ChartBar,
   ChevronUp,
   Eye,
-  LogOut,
   TrendingUp,
-  Search,
 } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
-import {
-  AreaChart,
-  Area,
-  BarChart,
-  Bar,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 // Datos de ejemplo para las estadísticas
-const actividadReciente = [
-  { fecha: "Lun", vistas: 12 },
-  { fecha: "Mar", vistas: 19 },
-  { fecha: "Mié", vistas: 15 },
-  { fecha: "Jue", vistas: 22 },
-  { fecha: "Vie", vistas: 30 },
-  { fecha: "Sáb", vistas: 18 },
-  { fecha: "Dom", vistas: 25 },
-];
+// const actividadReciente = [
+//   { fecha: "Lun", vistas: 12 },
+//   { fecha: "Mar", vistas: 19 },
+//   { fecha: "Mié", vistas: 15 },
+//   { fecha: "Jue", vistas: 22 },
+//   { fecha: "Vie", vistas: 30 },
+//   { fecha: "Sáb", vistas: 18 },
+//   { fecha: "Dom", vistas: 25 },
+// ];
 
-const propiedadesCoincidentes = [
-  { hora: "00:00", cantidad: 2 },
-  { hora: "04:00", cantidad: 3 },
-  { hora: "08:00", cantidad: 7 },
-  { hora: "12:00", cantidad: 5 },
-  { hora: "16:00", cantidad: 9 },
-  { hora: "20:00", cantidad: 6 },
-];
+// const propiedadesCoincidentes = [
+//   { hora: "00:00", cantidad: 2 },
+//   { hora: "04:00", cantidad: 3 },
+//   { hora: "08:00", cantidad: 7 },
+//   { hora: "12:00", cantidad: 5 },
+//   { hora: "16:00", cantidad: 9 },
+//   { hora: "20:00", cantidad: 6 },
+// ];
 
-const rendimientoROI = [
-  { mes: "Ene", roi: 3.2 },
-  { mes: "Feb", roi: 3.5 },
-  { mes: "Mar", roi: 3.3 },
-  { mes: "Abr", roi: 3.8 },
-  { mes: "May", roi: 4.0 },
-  { mes: "Jun", roi: 3.9 },
-  { mes: "Jul", roi: 4.2 },
-  { mes: "Ago", roi: 4.5 },
-  { mes: "Sep", roi: 4.3 },
-  { mes: "Oct", roi: 4.6 },
-  { mes: "Nov", roi: 4.8 },
-  { mes: "Dic", roi: 5.0 },
-];
-
-const rendimientoRentabilidad = [
-  { year: "2020", performance: 13.4 },
-  { year: "2021", performance: 15.2 },
-  { year: "2022", performance: 16.8 },
-  { year: "2023", performance: 18.5 },
-  { year: "2024", performance: 20.1 },
-  { year: "2025", performance: 21.7 },
-];
+// const rendimientoROI = [
+//   { mes: "Ene", roi: 3.2 },
+//   { mes: "Feb", roi: 3.5 },
+//   { mes: "Mar", roi: 3.3 },
+//   { mes: "Abr", roi: 3.8 },
+//   { mes: "May", roi: 4.0 },
+//   { mes: "Jun", roi: 3.9 },
+//   { mes: "Jul", roi: 4.2 },
+//   { mes: "Ago", roi: 4.5 },
+//   { mes: "Sep", roi: 4.3 },
+//   { mes: "Oct", roi: 4.6 },
+//   { mes: "Nov", roi: 4.8 },
+//   { mes: "Dic", roi: 5.0 },
+// ];
 
 // Datos de ejemplo para propiedades coincidentes en las últimas 24 horas
 const propiedadesUltimas24h = [
@@ -237,7 +213,6 @@ const propiedadesUsuario = [
 ];
 
 export default function Estadisticas() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
 
@@ -267,28 +242,7 @@ export default function Estadisticas() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="px-4 lg:px-6 h-16 flex items-center border-b bg-white sticky top-0 z-10">
-        <div className="flex items-center gap-2 font-bold text-xl">
-          <Building className="h-6 w-6 text-primary" />
-          <span>Realytics</span>
-        </div>
-
-        <div className="ml-auto flex items-center gap-4">
-          {email && <span className="text-sm text-gray-500">{email}</span>}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push("/search")}
-          >
-            <Search className="h-4 w-4 mr-2" />
-            Nueva búsqueda
-          </Button>
-          <Button variant="ghost" size="sm" onClick={() => router.push("/")}>
-            <LogOut className="h-4 w-4 mr-2" />
-            Salir
-          </Button>
-        </div>
-      </header>
+      <AppHeader email={email} />
 
       <main className="flex-1 p-4 md:p-6 bg-gray-50">
         <div className="mb-6">
@@ -384,73 +338,23 @@ export default function Estadisticas() {
                     className="md:basis-1/2 lg:basis-1/4"
                   >
                     <div className="p-0">
-                      <PropertyCard
-                        property={{
-                          since: propiedad.horaCoincidencia,
-                          indice: propiedad.coincidencia,
-                          title: propiedad.titulo,
-                          location: propiedad.ubicacion,
-                          prize: propiedad.precio,
-                          roi: propiedad.roi,
-                          rooms: propiedad.habitaciones,
-                          baths: propiedad.banos,
-                          squareMeters: propiedad.metros,
-                          type: propiedad.tipo,
-                          mainImg: propiedad.imagen,
-                        }}
-                      />
-                      {/* <Card className="overflow-hidden">
-                        <div className="relative h-48">
-                          <Image
-                            src={propiedad.imagen || "/placeholder.svg"}
-                            alt={propiedad.titulo}
-                            fill
-                            className="object-cover"
-                          />
-                          <div className="absolute top-2 right-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
-                            {propiedad.coincidencia}% coincidencia
-                          </div>
-                        </div>
-                        <CardContent className="p-4">
-                          <div className="mb-2">
-                            <span className="inline-block px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded-md">
-                              {propiedad.tipo}
-                            </span>
-                            <span className="text-xs text-gray-500 ml-2">
-                              {propiedad.horaCoincidencia}
-                            </span>
-                          </div>
-                          <h3 className="text-lg font-semibold mb-2 line-clamp-1">
-                            {propiedad.titulo}
-                          </h3>
-                          <p className="text-gray-500 mb-2 flex items-center text-sm">
-                            <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
-                            <span className="line-clamp-1">
-                              {propiedad.ubicacion}
-                            </span>
-                          </p>
-                          <p className="text-xl font-bold text-primary mb-3">
-                            {formatearMoneda(propiedad.precio)}
-                          </p>
-                          <div className="flex justify-between text-xs text-gray-500">
-                            <span className="flex items-center">
-                              <Bed className="h-3 w-3 mr-1" />
-                              {propiedad.habitaciones} hab.
-                            </span>
-                            <span className="flex items-center">
-                              <Bath className="h-3 w-3 mr-1" />
-                              {propiedad.banos} baños
-                            </span>
-                            <span className="flex items-center">
-                              <Maximize className="h-3 w-3 mr-1" />
-                              {propiedad.metros} m²
-                            </span>
-                          </div>
-                          <Button className="w-full mt-3 text-sm" size="sm">
-                            Ver detalles
-                          </Button>
-                        </CardContent>
-                      </Card> */}
+                      <Link href={`/property/${propiedad.id}?email=${email}`}>
+                        <PropertyCard
+                          property={{
+                            since: propiedad.horaCoincidencia,
+                            indice: propiedad.coincidencia,
+                            title: propiedad.titulo,
+                            location: propiedad.ubicacion,
+                            prize: propiedad.precio,
+                            roi: propiedad.roi,
+                            rooms: propiedad.habitaciones,
+                            baths: propiedad.banos,
+                            squareMeters: propiedad.metros,
+                            type: propiedad.tipo,
+                            mainImg: propiedad.imagen,
+                          }}
+                        />
+                      </Link>
                     </div>
                   </CarouselItem>
                 ))}
@@ -461,115 +365,6 @@ export default function Estadisticas() {
               </div>
             </Carousel>
           </CardContent>
-        </div>
-
-        {/* Gráficos */}
-        <div className="grid gap-6 md:grid-cols-2 mb-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Actividad Reciente</CardTitle>
-              <CardDescription>
-                Propiedades consultadas en los últimos 7 días
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={actividadReciente}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="fecha" />
-                    <YAxis />
-                    <Tooltip />
-                    <Area
-                      type="monotone"
-                      dataKey="vistas"
-                      stroke="#3b82f6"
-                      fill="#3b82f6"
-                      fillOpacity={0.2}
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Propiedades Coincidentes</CardTitle>
-              <CardDescription>
-                Propiedades que coinciden con tu perfil en las últimas 24h
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={propiedadesCoincidentes}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="hora" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="cantidad" fill="#3b82f6" />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2 mb-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Rendimiento ROI</CardTitle>
-              <CardDescription>
-                Evolución del ROI durante el último año
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={rendimientoROI}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="mes" />
-                    <YAxis />
-                    <Tooltip />
-                    <Line
-                      type="monotone"
-                      dataKey="roi"
-                      stroke="#3b82f6"
-                      strokeWidth={2}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Rentabilidad total</CardTitle>
-              <CardDescription>
-                Evolucion de la rentabilidad total de tus inmuebles
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={rendimientoRentabilidad}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="year" />
-                    <YAxis />
-                    <Tooltip />
-                    <Line
-                      type="monotone"
-                      dataKey="performance"
-                      stroke="#3b82f6"
-                      strokeWidth={2}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Tabla de propiedades */}

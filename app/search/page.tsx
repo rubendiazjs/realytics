@@ -1,5 +1,6 @@
 "use client";
 
+import { AppHeader } from "@/components/realytics/app-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -14,18 +15,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import {
-  Bath,
-  Bed,
-  Building,
-  ChartBar,
-  Home,
-  LogOut,
-  MapPin,
-  Maximize,
-} from "lucide-react";
+import { Bath, Bed, Home, MapPin, Maximize } from "lucide-react";
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 // Datos de ejemplo para inmuebles
@@ -112,7 +105,6 @@ const propiedades = [
 
 export default function Dashboard() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const email = searchParams.get("email") || "";
 
   const [filtros, setFiltros] = useState({
@@ -216,28 +208,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="px-4 lg:px-6 h-16 flex items-center border-b bg-white sticky top-0 z-10">
-        <div className="flex items-center gap-2 font-bold text-xl">
-          <Building className="h-6 w-6 text-primary" />
-          <span>Realytics</span>
-        </div>
-
-        <div className="ml-auto flex items-center gap-4">
-          {email && <span className="text-sm text-gray-500">{email}</span>}
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push("/dashboard")}
-          >
-            <ChartBar className="h-4 w-4 mr-2" />
-            Dashboard
-          </Button>
-          <Button variant="ghost" size="sm" onClick={() => router.push("/")}>
-            <LogOut className="h-4 w-4 mr-2" />
-            Salir
-          </Button>
-        </div>
-      </header>
+      <AppHeader />
 
       <div className="flex flex-col md:flex-row flex-1">
         {/* Panel de filtros */}
@@ -445,7 +416,11 @@ export default function Dashboard() {
                       {propiedad.metros} m²
                     </span>
                   </div>
-                  <Button className="w-full mt-4">Ver detalles</Button>
+                  <Link href={`/property/${propiedad.id}?email=${email}`}>
+                    <Button className="w-full mt-3 text-sm" size="sm">
+                      Ver detalles
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             ))}
