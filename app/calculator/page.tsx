@@ -25,10 +25,12 @@ export default function CalculatorPage() {
   });
 
   const [reformData, setReformData] = useState<ReformFormData>({
+    tipoCalculo: "automatico",
     necesitaReforma: false,
     nivelReforma: "estandar",
     porcentajeReforma: 100,
     presupuestoPersonalizado: null,
+    elementosSeleccionados: {},
   });
 
   const [taxData, setTaxData] = useState<TaxFormData>({

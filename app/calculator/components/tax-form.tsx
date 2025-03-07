@@ -40,7 +40,10 @@ interface TaxFormProps {
 }
 
 export function TaxForm({ data, onChange, precioInmueble }: TaxFormProps) {
-  const handleChange = (field: keyof TaxFormData, value: string | number) => {
+  const handleChange = (
+    field: keyof TaxFormData,
+    value: string | number | boolean
+  ) => {
     onChange({
       ...data,
       [field]: value,
