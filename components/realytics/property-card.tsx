@@ -31,7 +31,9 @@ export function PropertyCard({
   return (
     <div className="w-full group/card">
       <div
-        style={{ "--image-url": `url(${property.mainImg})` }}
+        style={
+          { "--image-url": `url(${property.mainImg})` } as React.CSSProperties
+        }
         className={cn(
           "cursor-pointer overflow-hidden relative card h-96 rounded-md shadow-xl mx-auto backgroundImage flex flex-col justify-between p-4",
           "bg-[image:var(--image-url)] bg-cover"
