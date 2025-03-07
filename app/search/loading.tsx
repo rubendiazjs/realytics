@@ -20,7 +20,7 @@ export default function Loading() {
               Cargando...
             </span>
           </div>
-          <p className="mt-4 text-gray-500">Cargando estadísticas...</p>
+          <p className="mt-4 text-gray-500">Cargando el dashboard...</p>
         </div>
       </div>
     </div>

@@ -1,10 +1,13 @@
 "use client";
 
+import ContentBlock from "@/components/landing/content-block";
+import { DotPattern } from "@/components/magicui/dot-pattern";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { AvatarImage } from "@radix-ui/react-avatar";
-import { Building, CheckCircle, Home, Search } from "lucide-react";
+import { Building, HammerIcon, Home, Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -60,9 +63,20 @@ export default function LandingPage() {
         </nav>
       </header>
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-white to-gray-50">
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px]">
+        <section className="w-full bg-gradient-to-b from-white to-gray-50 ">
+          <div className="relative container px-4 md:px-6">
+            <div className="grid gap-6 lg:grid-cols-[1fr_500px] lg:gap-12 xl:grid-cols-[1fr_550px] py-12 md:py-24 lg:py-32">
+              <DotPattern
+                width={20}
+                height={20}
+                glow={true}
+                cx={1}
+                cy={1}
+                cr={1}
+                className={cn(
+                  "[mask-image:linear-gradient(to_bottom_right,white,transparent,transparent)] "
+                )}
+              />
               <div className="flex flex-col justify-center space-y-4">
                 <div className="space-y-2">
                   <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
@@ -119,21 +133,18 @@ export default function LandingPage() {
           className="w-full py-12 md:py-24 lg:py-32 bg-white"
         >
           <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <div className="inline-block rounded-lg bg-primary/10 px-3 py-1 text-sm text-primary">
-                  Características exclusivas
-                </div>
-                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
-                  Por qué elegir nuestro buscador inmobiliario
-                </h2>
-                <p className="max-w-[900px] text-gray-500 md:text-xl">
-                  Nuestras herramientas de búsqueda avanzadas te ayudan a
-                  encontrar exactamente lo que buscas en el mercado
-                  inmobiliario.
-                </p>
-              </div>
-            </div>
+            <ContentBlock>
+              <ContentBlock.Badge>
+                Características exclusivas
+              </ContentBlock.Badge>
+              <ContentBlock.Header>
+                Por qué elegir nuestro buscador inmobiliario
+              </ContentBlock.Header>
+              <ContentBlock.Description>
+                Nuestras herramientas de búsqueda avanzadas te ayudan a
+                encontrar exactamente lo que buscas en el mercado inmobiliario.
+              </ContentBlock.Description>
+            </ContentBlock>
             <div className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-3">
               <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm">
                 <Search className="h-12 w-12 text-primary" />
@@ -152,13 +163,11 @@ export default function LandingPage() {
                 </p>
               </div>
               <div className="flex flex-col items-center space-y-2 rounded-lg border p-6 shadow-sm">
-                <CheckCircle className="h-12 w-12 text-primary" />
-                <h3 className="text-xl font-bold">
-                  Actualizaciones en tiempo real
-                </h3>
+                <HammerIcon className="h-12 w-12 text-primary" />
+                <h3 className="text-xl font-bold">Planificador de reformas</h3>
                 <p className="text-center text-gray-500">
-                  Recibe notificaciones instantáneas cuando nuevas propiedades
-                  que coincidan con tus criterios estén disponibles.
+                  Recibe un presupuesto estimado que encaje con el tipo de
+                  reforma que tu propiedad necesita.
                 </p>
               </div>
             </div>
@@ -170,17 +179,12 @@ export default function LandingPage() {
           className="w-full py-12 md:py-24 lg:py-32 bg-gray-50"
         >
           <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
-                  Cómo Funciona
-                </h2>
-                <p className="max-w-[900px] text-gray-500 md:text-xl">
-                  Comenzar con nuestro buscador inmobiliario es simple y
-                  directo.
-                </p>
-              </div>
-            </div>
+            <ContentBlock>
+              <ContentBlock.Header>Cómo Funciona</ContentBlock.Header>
+              <ContentBlock.Description>
+                Comenzar con nuestro buscador inmobiliario es simple y directo.
+              </ContentBlock.Description>
+            </ContentBlock>
             <div className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-3">
               <div className="flex flex-col items-center space-y-2">
                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white">
@@ -200,7 +204,7 @@ export default function LandingPage() {
                   Establece tus Preferencias
                 </h3>
                 <p className="text-center text-gray-500">
-                  Cuéntanos el tipo de inmueble e inversión que estás buscando.
+                  Cuéntanos el tipo de inmueble que estás buscando.
                 </p>
               </div>
               <div className="flex flex-col items-center space-y-2">
@@ -223,17 +227,17 @@ export default function LandingPage() {
         >
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2 flex flex-col items-center">
-                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
+              <ContentBlock>
+                <ContentBlock.Header>
                   ¿Te gustaría descubrir propiedades alineadas con tu estrategia
                   financiera?
-                </h2>
-                <p className="max-w-[600px] text-primary-foreground/80 md:text-xl">
+                </ContentBlock.Header>
+                <ContentBlock.Description className="max-w-[600px] text-primary-foreground/80">
                   Únete a miles de usuarios que han encontrado las propiedades
                   que mejor se ajustan a sus necesidades financieras y objetivos
                   de inversión.
-                </p>
-              </div>
+                </ContentBlock.Description>
+              </ContentBlock>
               <div className="w-full max-w-sm space-y-2">
                 <form
                   className="flex flex-col gap-2 sm:flex-row"
@@ -263,20 +267,18 @@ export default function LandingPage() {
           className="w-full py-12 md:py-24 lg:py-32 bg-white"
         >
           <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
-                  Lo que dicen nuestros usuarios
-                </h2>
-                <p className="max-w-[900px] text-gray-500 md:text-xl">
-                  "Gracias a este buscador, encontré la inversión inmobiliaria
-                  perfecta para mis objetivos financieros. El proceso fue rápido
-                  y sencillo, y ahora tengo una propiedad que se adapta
-                  completamente a mi estrategia de crecimiento. ¡Muy
-                  recomendable para cualquier inversor!"
-                </p>
-              </div>
-            </div>
+            <ContentBlock>
+              <ContentBlock.Header>
+                Lo que dicen nuestros usuarios
+              </ContentBlock.Header>
+              <ContentBlock.Description>
+                "Gracias a este buscador, encontré la inversión inmobiliaria
+                perfecta para mis objetivos financieros. El proceso fue rápido y
+                sencillo, y ahora tengo una propiedad que se adapta
+                completamente a mi estrategia de crecimiento. ¡Muy recomendable
+                para cualquier inversor!"
+              </ContentBlock.Description>
+            </ContentBlock>
             <div className="mx-auto grid max-w-5xl gap-6 py-12 md:grid-cols-2 lg:grid-cols-3">
               <div className="flex flex-col justify-between space-y-4 rounded-lg border p-6 shadow-sm">
                 <div className="space-y-2">

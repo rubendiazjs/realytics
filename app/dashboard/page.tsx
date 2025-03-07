@@ -1,209 +1,268 @@
 "use client";
 
+import { PropertyCard } from "@/components/realytics/property-card";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
-  Bath,
-  Bed,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import {
   Building,
-  Home,
+  BarChartIcon as ChartBar,
+  ChevronUp,
+  Eye,
   LogOut,
-  MapPin,
-  Maximize,
+  TrendingUp,
+  Search,
 } from "lucide-react";
-import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import {
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
-// Datos de ejemplo para inmuebles
-const propiedades = [
+// Datos de ejemplo para las estadísticas
+const actividadReciente = [
+  { fecha: "Lun", vistas: 12 },
+  { fecha: "Mar", vistas: 19 },
+  { fecha: "Mié", vistas: 15 },
+  { fecha: "Jue", vistas: 22 },
+  { fecha: "Vie", vistas: 30 },
+  { fecha: "Sáb", vistas: 18 },
+  { fecha: "Dom", vistas: 25 },
+];
+
+const propiedadesCoincidentes = [
+  { hora: "00:00", cantidad: 2 },
+  { hora: "04:00", cantidad: 3 },
+  { hora: "08:00", cantidad: 7 },
+  { hora: "12:00", cantidad: 5 },
+  { hora: "16:00", cantidad: 9 },
+  { hora: "20:00", cantidad: 6 },
+];
+
+const rendimientoROI = [
+  { mes: "Ene", roi: 3.2 },
+  { mes: "Feb", roi: 3.5 },
+  { mes: "Mar", roi: 3.3 },
+  { mes: "Abr", roi: 3.8 },
+  { mes: "May", roi: 4.0 },
+  { mes: "Jun", roi: 3.9 },
+  { mes: "Jul", roi: 4.2 },
+  { mes: "Ago", roi: 4.5 },
+  { mes: "Sep", roi: 4.3 },
+  { mes: "Oct", roi: 4.6 },
+  { mes: "Nov", roi: 4.8 },
+  { mes: "Dic", roi: 5.0 },
+];
+
+const rendimientoRentabilidad = [
+  { year: "2020", performance: 13.4 },
+  { year: "2021", performance: 15.2 },
+  { year: "2022", performance: 16.8 },
+  { year: "2023", performance: 18.5 },
+  { year: "2024", performance: 20.1 },
+  { year: "2025", performance: 21.7 },
+];
+
+// Datos de ejemplo para propiedades coincidentes en las últimas 24 horas
+const propiedadesUltimas24h = [
   {
     id: 1,
-    titulo: "Apartamento moderno en el centro",
-    precio: 250000,
-    ubicacion: "Madrid, Centro",
+    titulo: "Ático con terraza panorámica",
+    precio: 285000,
+    ubicacion: "Madrid, Chamberí",
     habitaciones: 2,
-    banos: 1,
-    metros: 85,
-    imagen: "/placeholder.svg?height=300&width=400",
-    tipo: "Apartamento",
-    caracteristicas: ["Terraza", "Ascensor", "Garaje"],
+    banos: 2,
+    metros: 90,
+    imagen:
+      "https://img4.idealista.com/blur/WEB_DETAIL_TOP-L-L/0/id.pro.es.image.master/4d/88/4d/1279518724.jpg",
+    tipo: "Ático",
+    coincidencia: 95,
+    horaCoincidencia: "Hace 2 horas",
+    roi: 6.2,
   },
   {
     id: 2,
-    titulo: "Chalet con jardín en zona residencial",
-    precio: 450000,
-    ubicacion: "Barcelona, Zona Alta",
-    habitaciones: 4,
-    banos: 3,
-    metros: 220,
-    imagen: "/placeholder.svg?height=300&width=400",
-    tipo: "Chalet",
-    caracteristicas: ["Jardín", "Piscina", "Garaje"],
+    titulo: "Piso reformado cerca del metro",
+    precio: 195000,
+    ubicacion: "Barcelona, Gracia",
+    habitaciones: 3,
+    banos: 1,
+    metros: 85,
+    imagen:
+      "https://img4.idealista.com/blur/WEB_DETAIL_TOP-L-L/0/id.pro.es.image.master/1f/32/c8/1141141073.jpg",
+    tipo: "Piso",
+    coincidencia: 92,
+    horaCoincidencia: "Hace 5 horas",
+    roi: 5.8,
   },
   {
     id: 3,
-    titulo: "Ático con vistas panorámicas",
+    titulo: "Apartamento con vistas al mar",
     precio: 320000,
-    ubicacion: "Valencia, Ensanche",
-    habitaciones: 3,
+    ubicacion: "Valencia, Playa",
+    habitaciones: 2,
     banos: 2,
-    metros: 110,
-    imagen: "/placeholder.svg?height=300&width=400",
-    tipo: "Ático",
-    caracteristicas: ["Terraza", "Vistas", "Ascensor"],
+    metros: 75,
+    imagen:
+      "https://img4.idealista.com/blur/WEB_DETAIL_TOP-L-L/0/id.pro.es.image.master/d3/03/6e/1297921231.jpg",
+    tipo: "Apartamento",
+    coincidencia: 89,
+    horaCoincidencia: "Hace 8 horas",
+    roi: 7.1,
   },
   {
     id: 4,
-    titulo: "Piso reformado en barrio histórico",
-    precio: 180000,
-    ubicacion: "Sevilla, Casco Antiguo",
-    habitaciones: 2,
-    banos: 1,
-    metros: 75,
-    imagen: "/placeholder.svg?height=300&width=400",
-    tipo: "Piso",
-    caracteristicas: ["Reformado", "Aire acondicionado"],
+    titulo: "Dúplex en zona residencial",
+    precio: 275000,
+    ubicacion: "Sevilla, Nervión",
+    habitaciones: 3,
+    banos: 2,
+    metros: 120,
+    imagen:
+      "https://img4.idealista.com/blur/WEB_DETAIL_TOP-L-L/0/id.pro.es.image.master/50/39/ef/1285131947.jpg",
+    tipo: "Dúplex",
+    coincidencia: 87,
+    horaCoincidencia: "Hace 10 horas",
+    roi: 6.5,
   },
   {
     id: 5,
-    titulo: "Dúplex con terraza en zona tranquila",
-    precio: 290000,
+    titulo: "Chalet adosado con jardín",
+    precio: 390000,
     ubicacion: "Málaga, Este",
-    habitaciones: 3,
-    banos: 2,
-    metros: 130,
-    imagen: "/placeholder.svg?height=300&width=400",
-    tipo: "Dúplex",
-    caracteristicas: ["Terraza", "Trastero", "Garaje"],
+    habitaciones: 4,
+    banos: 3,
+    metros: 180,
+    imagen:
+      "https://img4.idealista.com/blur/WEB_DETAIL_TOP-L-L/0/id.pro.es.image.master/7c/2e/6e/1284944851.jpg",
+    tipo: "Chalet",
+    coincidencia: 85,
+    horaCoincidencia: "Hace 14 horas",
+    roi: 6.8,
   },
   {
     id: 6,
-    titulo: "Casa adosada con jardín comunitario",
-    precio: 320000,
-    ubicacion: "Bilbao, Deusto",
+    titulo: "Estudio céntrico reformado",
+    precio: 145000,
+    ubicacion: "Bilbao, Abando",
+    habitaciones: 1,
+    banos: 1,
+    metros: 45,
+    imagen:
+      "https://img4.idealista.com/blur/WEB_DETAIL_TOP-L-L/0/id.pro.es.image.master/9b/72/6b/1303936784.jpg",
+    tipo: "Estudio",
+    coincidencia: 83,
+    horaCoincidencia: "Hace 18 horas",
+    roi: 5.3,
+  },
+  {
+    id: 7,
+    titulo: "Piso con terraza en zona tranquila",
+    precio: 230000,
+    ubicacion: "Zaragoza, Centro",
     habitaciones: 3,
-    banos: 2,
-    metros: 140,
-    imagen: "/placeholder.svg?height=300&width=400",
-    tipo: "Adosado",
-    caracteristicas: ["Jardín comunitario", "Garaje", "Trastero"],
+    banos: 1,
+    metros: 95,
+    imagen:
+      "https://img4.idealista.com/blur/WEB_DETAIL_TOP-L-L/0/id.pro.es.image.master/66/ea/4c/1272760165.jpg",
+    tipo: "Piso",
+    coincidencia: 81,
+    horaCoincidencia: "Hace 22 horas",
+    roi: 5.6,
   },
 ];
 
-export default function Dashboard() {
-  const searchParams = useSearchParams();
+const propiedadesUsuario = [
+  {
+    id: 1,
+    nombre: "Apartamento Centro",
+    tipo: "Apartamento",
+    valorCompra: 180000,
+    valorActual: 210000,
+    rentaMensual: 850,
+    roi: 5.7,
+    tendencia: "alza",
+  },
+  {
+    id: 2,
+    nombre: "Chalet Zona Norte",
+    tipo: "Casa",
+    valorCompra: 320000,
+    valorActual: 365000,
+    rentaMensual: 1200,
+    roi: 4.5,
+    tendencia: "alza",
+  },
+  {
+    id: 3,
+    nombre: "Local Comercial",
+    tipo: "Local",
+    valorCompra: 150000,
+    valorActual: 155000,
+    rentaMensual: 950,
+    roi: 7.6,
+    tendencia: "estable",
+  },
+  {
+    id: 4,
+    nombre: "Piso Playa",
+    tipo: "Apartamento",
+    valorCompra: 210000,
+    valorActual: 245000,
+    rentaMensual: 1100,
+    roi: 6.3,
+    tendencia: "alza",
+  },
+];
+
+export default function Estadisticas() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const email = searchParams.get("email") || "";
 
-  const [filtros, setFiltros] = useState({
-    precioMin: 0,
-    precioMax: 500000,
-    habitaciones: "",
-    tipo: "",
-    ubicacion: "",
-    caracteristicas: [] as string[],
-  });
+  // Calcular estadísticas generales
+  const totalPropiedades = propiedadesUsuario.length;
+  const totalInversion = propiedadesUsuario.reduce(
+    (sum, prop) => sum + prop.valorCompra,
+    0
+  );
+  const valorActualTotal = propiedadesUsuario.reduce(
+    (sum, prop) => sum + prop.valorActual,
+    0
+  );
+  const rentabilidadTotal =
+    ((valorActualTotal - totalInversion) / totalInversion) * 100;
+  const roiPromedio =
+    propiedadesUsuario.reduce((sum, prop) => sum + prop.roi, 0) /
+    totalPropiedades;
 
-  const [propiedadesFiltradas, setPropiedadesFiltradas] = useState(propiedades);
-
-  // Aplicar filtros cuando cambien
-  useEffect(() => {
-    const resultados = propiedades.filter((propiedad) => {
-      // Filtro de precio
-      if (
-        propiedad.precio < filtros.precioMin ||
-        propiedad.precio > filtros.precioMax
-      ) {
-        return false;
-      }
-
-      // Filtro de habitaciones
-      if (
-        filtros.habitaciones &&
-        propiedad.habitaciones.toString() !== filtros.habitaciones
-      ) {
-        return false;
-      }
-
-      // Filtro de tipo
-      if (filtros.tipo && propiedad.tipo !== filtros.tipo) {
-        return false;
-      }
-
-      // Filtro de ubicación
-      if (
-        filtros.ubicacion &&
-        !propiedad.ubicacion
-          .toLowerCase()
-          .includes(filtros.ubicacion.toLowerCase())
-      ) {
-        return false;
-      }
-
-      // Filtro de características
-      if (filtros.caracteristicas.length > 0) {
-        const tieneTodasLasCaracteristicas = filtros.caracteristicas.every(
-          (c) => propiedad.caracteristicas.includes(c)
-        );
-        if (!tieneTodasLasCaracteristicas) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-
-    setPropiedadesFiltradas(resultados);
-  }, [filtros]);
-
-  // Manejar cambios en los filtros
-  const handleFiltroChange = (campo: string, valor: number) => {
-    setFiltros((prev) => ({
-      ...prev,
-      [campo]: valor,
-    }));
-  };
-
-  // Manejar cambios en características
-  const handleCaracteristicaChange = (
-    caracteristica: string,
-    checked: boolean
-  ) => {
-    setFiltros((prev) => {
-      if (checked) {
-        return {
-          ...prev,
-          caracteristicas: [...prev.caracteristicas, caracteristica],
-        };
-      } else {
-        return {
-          ...prev,
-          caracteristicas: prev.caracteristicas.filter(
-            (c) => c !== caracteristica
-          ),
-        };
-      }
-    });
-  };
-
-  // Formatear precio para mostrar
-  const formatearPrecio = (precio: number) => {
+  // Formatear moneda
+  const formatearMoneda = (valor: number) => {
     return new Intl.NumberFormat("es-ES", {
       style: "currency",
       currency: "EUR",
-    }).format(precio);
+    }).format(valor);
   };
 
   return (
@@ -211,264 +270,410 @@ export default function Dashboard() {
       <header className="px-4 lg:px-6 h-16 flex items-center border-b bg-white sticky top-0 z-10">
         <div className="flex items-center gap-2 font-bold text-xl">
           <Building className="h-6 w-6 text-primary" />
-          <span>BuscaHogar</span>
+          <span>Realytics</span>
         </div>
 
-        {email && (
-          <div className="ml-auto flex items-center gap-4">
-            <span className="text-sm text-gray-500">{email}</span>
-            <Button variant="ghost" size="sm" onClick={() => router.push("/")}>
-              <LogOut className="h-4 w-4 mr-2" />
-              Salir
-            </Button>
-          </div>
-        )}
+        <div className="ml-auto flex items-center gap-4">
+          {email && <span className="text-sm text-gray-500">{email}</span>}
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.push("/search")}
+          >
+            <Search className="h-4 w-4 mr-2" />
+            Nueva búsqueda
+          </Button>
+          <Button variant="ghost" size="sm" onClick={() => router.push("/")}>
+            <LogOut className="h-4 w-4 mr-2" />
+            Salir
+          </Button>
+        </div>
       </header>
 
-      <div className="flex flex-col md:flex-row flex-1">
-        {/* Panel de filtros */}
-        <aside className="w-full md:w-80 p-4 border-r bg-gray-50">
-          <div className="space-y-6">
-            <div>
-              <h2 className="text-lg font-semibold mb-2">Filtros</h2>
-              <p className="text-sm text-gray-500 mb-4">
-                Encuentra tu propiedad ideal
+      <main className="flex-1 p-4 md:p-6 bg-gray-50">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <p className="text-gray-500">
+            Resumen de tu actividad y rendimiento en la plataforma
+          </p>
+        </div>
+
+        {/* Tarjetas de resumen */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">
+                Propiedades Consultadas
+              </CardTitle>
+              <Eye className="h-4 w-4 text-gray-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">142</div>
+              <p className="text-xs text-gray-500">
+                +28% respecto a la semana pasada
               </p>
-            </div>
+            </CardContent>
+          </Card>
 
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="ubicacion">Ubicación</Label>
-                <div className="relative">
-                  <MapPin className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
-                  <Input
-                    id="ubicacion"
-                    placeholder="Ciudad, barrio..."
-                    className="pl-8"
-                    value={filtros.ubicacion}
-                    onChange={(e) =>
-                      handleFiltroChange("ubicacion", Number(e.target.value))
-                    }
-                  />
-                </div>
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">
+                Propiedades Coincidentes
+              </CardTitle>
+              <ChartBar className="h-4 w-4 text-gray-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">32</div>
+              <p className="text-xs text-gray-500">En las últimas 24 horas</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">
+                ROI Promedio
+              </CardTitle>
+              <TrendingUp className="h-4 w-4 text-green-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {roiPromedio.toFixed(1)}%
               </div>
-
-              <div>
-                <Label>Precio</Label>
-                <div className="pt-6 pb-2">
-                  <Slider
-                    defaultValue={[0, 500000]}
-                    max={1000000}
-                    step={10000}
-                    onValueChange={(value) => {
-                      handleFiltroChange("precioMin", value[0]);
-                      handleFiltroChange("precioMax", value[1]);
-                    }}
-                  />
-                </div>
-                <div className="flex justify-between text-sm text-gray-500">
-                  <span>{formatearPrecio(filtros.precioMin)}</span>
-                  <span>{formatearPrecio(filtros.precioMax)}</span>
-                </div>
-              </div>
-
-              <div>
-                <Label htmlFor="tipo">Tipo de propiedad</Label>
-                <Select
-                  value={filtros.tipo}
-                  onValueChange={(value) =>
-                    handleFiltroChange("tipo", Number(value))
-                  }
-                >
-                  <SelectTrigger id="tipo">
-                    <SelectValue placeholder="Cualquier tipo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="any">Cualquier tipo</SelectItem>
-                    <SelectItem value="Piso">Piso</SelectItem>
-                    <SelectItem value="Apartamento">Apartamento</SelectItem>
-                    <SelectItem value="Chalet">Chalet</SelectItem>
-                    <SelectItem value="Ático">Ático</SelectItem>
-                    <SelectItem value="Dúplex">Dúplex</SelectItem>
-                    <SelectItem value="Adosado">Adosado</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label htmlFor="habitaciones">Habitaciones</Label>
-                <Select
-                  value={filtros.habitaciones}
-                  onValueChange={(value) =>
-                    handleFiltroChange("habitaciones", Number(value))
-                  }
-                >
-                  <SelectTrigger id="habitaciones">
-                    <SelectValue placeholder="Cualquier número" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="any">Cualquier número</SelectItem>
-                    <SelectItem value="1">1</SelectItem>
-                    <SelectItem value="2">2</SelectItem>
-                    <SelectItem value="3">3</SelectItem>
-                    <SelectItem value="4">4+</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div>
-                <Label className="mb-2 block">Características</Label>
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="terraza"
-                      checked={filtros.caracteristicas.includes("Terraza")}
-                      onCheckedChange={(checked) =>
-                        handleCaracteristicaChange(
-                          "Terraza",
-                          checked as boolean
-                        )
-                      }
-                    />
-                    <label htmlFor="terraza" className="text-sm">
-                      Terraza
-                    </label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="garaje"
-                      checked={filtros.caracteristicas.includes("Garaje")}
-                      onCheckedChange={(checked) =>
-                        handleCaracteristicaChange("Garaje", checked as boolean)
-                      }
-                    />
-                    <label htmlFor="garaje" className="text-sm">
-                      Garaje
-                    </label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="piscina"
-                      checked={filtros.caracteristicas.includes("Piscina")}
-                      onCheckedChange={(checked) =>
-                        handleCaracteristicaChange(
-                          "Piscina",
-                          checked as boolean
-                        )
-                      }
-                    />
-                    <label htmlFor="piscina" className="text-sm">
-                      Piscina
-                    </label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Checkbox
-                      id="ascensor"
-                      checked={filtros.caracteristicas.includes("Ascensor")}
-                      onCheckedChange={(checked) =>
-                        handleCaracteristicaChange(
-                          "Ascensor",
-                          checked as boolean
-                        )
-                      }
-                    />
-                    <label htmlFor="ascensor" className="text-sm">
-                      Ascensor
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </aside>
-
-        {/* Listado de propiedades */}
-        <main className="flex-1 p-4 bg-gray-100">
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold">Propiedades disponibles</h1>
-            <p className="text-gray-500">
-              {propiedadesFiltradas.length}{" "}
-              {propiedadesFiltradas.length === 1
-                ? "propiedad encontrada"
-                : "propiedades encontradas"}
-            </p>
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {propiedadesFiltradas.map((propiedad) => (
-              <Card key={propiedad.id} className="overflow-hidden">
-                <div className="relative h-48">
-                  <Image
-                    src={propiedad.imagen || "/placeholder.svg"}
-                    alt={propiedad.titulo}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <CardContent className="p-4">
-                  <div className="mb-2">
-                    <span className="inline-block px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded-md">
-                      {propiedad.tipo}
-                    </span>
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">
-                    {propiedad.titulo}
-                  </h3>
-                  <p className="text-gray-500 mb-2 flex items-center">
-                    <MapPin className="h-4 w-4 mr-1" />
-                    {propiedad.ubicacion}
-                  </p>
-                  <p className="text-xl font-bold text-primary mb-4">
-                    {formatearPrecio(propiedad.precio)}
-                  </p>
-                  <div className="flex justify-between text-sm text-gray-500">
-                    <span className="flex items-center">
-                      <Bed className="h-4 w-4 mr-1" />
-                      {propiedad.habitaciones} hab.
-                    </span>
-                    <span className="flex items-center">
-                      <Bath className="h-4 w-4 mr-1" />
-                      {propiedad.banos} baños
-                    </span>
-                    <span className="flex items-center">
-                      <Maximize className="h-4 w-4 mr-1" />
-                      {propiedad.metros} m²
-                    </span>
-                  </div>
-                  <Button className="w-full mt-4">Ver detalles</Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {propiedadesFiltradas.length === 0 && (
-            <div className="text-center py-12">
-              <Home className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-              <h3 className="text-lg font-medium mb-2">
-                No se encontraron propiedades
-              </h3>
-              <p className="text-gray-500 mb-4">
-                Prueba a ajustar los filtros para ver más resultados
+              <p className="text-xs text-green-500 flex items-center">
+                <ChevronUp className="h-3 w-3 mr-1" />
+                0.5% respecto al mes anterior
               </p>
-              <Button
-                variant="outline"
-                onClick={() =>
-                  setFiltros({
-                    precioMin: 0,
-                    precioMax: 500000,
-                    habitaciones: "",
-                    tipo: "",
-                    ubicacion: "",
-                    caracteristicas: [],
-                  })
-                }
-              >
-                Restablecer filtros
-              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium">
+                Rentabilidad Total
+              </CardTitle>
+              <TrendingUp className="h-4 w-4 text-green-500" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {rentabilidadTotal.toFixed(1)}%
+              </div>
+              <p className="text-xs text-green-500 flex items-center">
+                <ChevronUp className="h-3 w-3 mr-1" />
+                {formatearMoneda(valorActualTotal - totalInversion)}
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Carrusel de propiedades coincidentes en las últimas 24 horas */}
+        <div className="mb-6">
+          <CardHeader className="px-0">
+            <CardTitle>
+              Propiedades Coincidentes en las Últimas 24 Horas
+            </CardTitle>
+            <CardDescription>
+              Inmuebles que coinciden con tu perfil de inversión
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="px-0">
+            <Carousel className="w-full">
+              <CarouselContent>
+                {propiedadesUltimas24h.map((propiedad) => (
+                  <CarouselItem
+                    key={propiedad.id}
+                    className="md:basis-1/2 lg:basis-1/4"
+                  >
+                    <div className="p-0">
+                      <PropertyCard
+                        property={{
+                          since: propiedad.horaCoincidencia,
+                          indice: propiedad.coincidencia,
+                          title: propiedad.titulo,
+                          location: propiedad.ubicacion,
+                          prize: propiedad.precio,
+                          roi: propiedad.roi,
+                          rooms: propiedad.habitaciones,
+                          baths: propiedad.banos,
+                          squareMeters: propiedad.metros,
+                          type: propiedad.tipo,
+                          mainImg: propiedad.imagen,
+                        }}
+                      />
+                      {/* <Card className="overflow-hidden">
+                        <div className="relative h-48">
+                          <Image
+                            src={propiedad.imagen || "/placeholder.svg"}
+                            alt={propiedad.titulo}
+                            fill
+                            className="object-cover"
+                          />
+                          <div className="absolute top-2 right-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+                            {propiedad.coincidencia}% coincidencia
+                          </div>
+                        </div>
+                        <CardContent className="p-4">
+                          <div className="mb-2">
+                            <span className="inline-block px-2 py-1 text-xs font-medium bg-primary/10 text-primary rounded-md">
+                              {propiedad.tipo}
+                            </span>
+                            <span className="text-xs text-gray-500 ml-2">
+                              {propiedad.horaCoincidencia}
+                            </span>
+                          </div>
+                          <h3 className="text-lg font-semibold mb-2 line-clamp-1">
+                            {propiedad.titulo}
+                          </h3>
+                          <p className="text-gray-500 mb-2 flex items-center text-sm">
+                            <MapPin className="h-4 w-4 mr-1 flex-shrink-0" />
+                            <span className="line-clamp-1">
+                              {propiedad.ubicacion}
+                            </span>
+                          </p>
+                          <p className="text-xl font-bold text-primary mb-3">
+                            {formatearMoneda(propiedad.precio)}
+                          </p>
+                          <div className="flex justify-between text-xs text-gray-500">
+                            <span className="flex items-center">
+                              <Bed className="h-3 w-3 mr-1" />
+                              {propiedad.habitaciones} hab.
+                            </span>
+                            <span className="flex items-center">
+                              <Bath className="h-3 w-3 mr-1" />
+                              {propiedad.banos} baños
+                            </span>
+                            <span className="flex items-center">
+                              <Maximize className="h-3 w-3 mr-1" />
+                              {propiedad.metros} m²
+                            </span>
+                          </div>
+                          <Button className="w-full mt-3 text-sm" size="sm">
+                            Ver detalles
+                          </Button>
+                        </CardContent>
+                      </Card> */}
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <div className="flex justify-center mt-9">
+                <CarouselPrevious className="relative mr-2" />
+                <CarouselNext className="relative" />
+              </div>
+            </Carousel>
+          </CardContent>
+        </div>
+
+        {/* Gráficos */}
+        <div className="grid gap-6 md:grid-cols-2 mb-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Actividad Reciente</CardTitle>
+              <CardDescription>
+                Propiedades consultadas en los últimos 7 días
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={actividadReciente}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="fecha" />
+                    <YAxis />
+                    <Tooltip />
+                    <Area
+                      type="monotone"
+                      dataKey="vistas"
+                      stroke="#3b82f6"
+                      fill="#3b82f6"
+                      fillOpacity={0.2}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Propiedades Coincidentes</CardTitle>
+              <CardDescription>
+                Propiedades que coinciden con tu perfil en las últimas 24h
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={propiedadesCoincidentes}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="hora" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="cantidad" fill="#3b82f6" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-2 mb-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Rendimiento ROI</CardTitle>
+              <CardDescription>
+                Evolución del ROI durante el último año
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={rendimientoROI}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="mes" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line
+                      type="monotone"
+                      dataKey="roi"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Rentabilidad total</CardTitle>
+              <CardDescription>
+                Evolucion de la rentabilidad total de tus inmuebles
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[300px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={rendimientoRentabilidad}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="year" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line
+                      type="monotone"
+                      dataKey="performance"
+                      stroke="#3b82f6"
+                      strokeWidth={2}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Tabla de propiedades */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Tus Propiedades</CardTitle>
+            <CardDescription>
+              Rendimiento de tus propiedades actuales
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b">
+                    <th className="text-left py-3 px-4 font-medium">
+                      Propiedad
+                    </th>
+                    <th className="text-left py-3 px-4 font-medium">Tipo</th>
+                    <th className="text-right py-3 px-4 font-medium">
+                      Valor Compra
+                    </th>
+                    <th className="text-right py-3 px-4 font-medium">
+                      Valor Actual
+                    </th>
+                    <th className="text-right py-3 px-4 font-medium">
+                      Renta Mensual
+                    </th>
+                    <th className="text-right py-3 px-4 font-medium">ROI</th>
+                    <th className="text-right py-3 px-4 font-medium">
+                      Tendencia
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {propiedadesUsuario.map((propiedad) => (
+                    <tr key={propiedad.id} className="border-b">
+                      <td className="py-3 px-4">{propiedad.nombre}</td>
+                      <td className="py-3 px-4">{propiedad.tipo}</td>
+                      <td className="py-3 px-4 text-right">
+                        {formatearMoneda(propiedad.valorCompra)}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        {formatearMoneda(propiedad.valorActual)}
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        {formatearMoneda(propiedad.rentaMensual)}
+                      </td>
+                      <td className="py-3 px-4 text-right font-medium">
+                        {propiedad.roi}%
+                      </td>
+                      <td className="py-3 px-4 text-right">
+                        <span
+                          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                            propiedad.tendencia === "alza"
+                              ? "bg-green-100 text-green-800"
+                              : propiedad.tendencia === "baja"
+                              ? "bg-red-100 text-red-800"
+                              : "bg-gray-100 text-gray-800"
+                          }`}
+                        >
+                          {propiedad.tendencia === "alza" && (
+                            <ChevronUp className="h-3 w-3 mr-1" />
+                          )}
+                          {propiedad.tendencia === "alza"
+                            ? "En alza"
+                            : propiedad.tendencia === "baja"
+                            ? "En baja"
+                            : "Estable"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="bg-gray-50">
+                    <td className="py-3 px-4 font-medium" colSpan={2}>
+                      Total
+                    </td>
+                    <td className="py-3 px-4 text-right font-medium">
+                      {formatearMoneda(totalInversion)}
+                    </td>
+                    <td className="py-3 px-4 text-right font-medium">
+                      {formatearMoneda(valorActualTotal)}
+                    </td>
+                    <td className="py-3 px-4 text-right font-medium">
+                      {formatearMoneda(
+                        propiedadesUsuario.reduce(
+                          (sum, prop) => sum + prop.rentaMensual,
+                          0
+                        )
+                      )}
+                    </td>
+                    <td className="py-3 px-4 text-right font-medium">
+                      {roiPromedio.toFixed(1)}%
+                    </td>
+                    <td className="py-3 px-4"></td>
+                  </tr>
+                </tfoot>
+              </table>
             </div>
-          )}
-        </main>
-      </div>
+          </CardContent>
+        </Card>
+      </main>
     </div>
   );
 }
